@@ -1,0 +1,64 @@
+services:
+  ldap:
+    container_name: ldap
+    image: dcm4che/slapd-dcm4chee:2.4.44-12.0
+    restart: unless-stopped
+    ports:
+      - "389:389"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /var/local/dcm4chee-arc/ldap:/var/lib/ldap
+      - /var/local/dcm4chee-arc/slapd.d:/etc/ldap/slapd.d
+  postgres:
+    container_name: db
+    image: dcm4che/postgres-dcm4chee:10.0-12
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: pacsdb
+      POSTGRES_USER: pacs
+      POSTGRES_PASSWORD: /run/secrets/db_pw
+    secrets:
+      - db_pw
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /var/local/dcm4chee-arc/db:/var/lib/postgresql/data
+  arc:
+    container_name: arc
+    image: dcm4che/dcm4chee-arc-psql:5.12.0
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+      - "9990:9990"
+      - "11112:11112"
+      - "2575:2575"
+    environment:
+      POSTGRES_DB: pacsdb
+      POSTGRES_USER: pacs
+      POSTGRES_PASSWORD: /run/secrets/db_pw
+      WILDFLY_WAIT_FOR: ldap:389 db:5432
+    secrets:
+      - db_pw
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /var/local/dcm4chee-arc/wildfly:/opt/wildfly/standalone
+  oviyam:
+    container_name: oviyam
+    image:  informaticamedica/oviyam:2.7.1
+    restart: unless-stopped
+    ports:
+      - "80:8080"
+      - "1025:1025"
+    volumes:
+      - /oviyam:/usr/local/tomcat/work
+networks:
+  default:
+      name: dcm4chee_default
+secrets:
+   db_pw:
+    file: db_pw

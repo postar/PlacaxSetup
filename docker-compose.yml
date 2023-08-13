@@ -9,7 +9,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
       - /var/local/placax-reports/ldap:/var/lib/ldap
-      - /var/local/placax-reports/slapd.d:/etc/ldap/slapd.d  
+      - /var/local/placax-reports/slapd.d:/etc/ldap/slapd.d
   db:
     container_name: db
     image: dcm4che/postgres-dcm4chee:10.0-12
@@ -19,9 +19,7 @@ services:
     environment:
       POSTGRES_DB: pacsdb
       POSTGRES_USER: pacs
-      POSTGRES_PASSWORD: /run/secrets/db_pw
-    secrets:
-      - db_pw
+      POSTGRES_PASSWORD: ${DB_PW}
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
@@ -41,10 +39,8 @@ services:
     environment:
       POSTGRES_DB: pacsdb
       POSTGRES_USER: pacs
-      POSTGRES_PASSWORD: /run/secrets/db_pw
+      POSTGRES_PASSWORD: ${DB_PW}
       WILDFLY_WAIT_FOR: ldap:389 db:5432
-    secrets:
-    - db_pw
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
@@ -56,8 +52,8 @@ services:
     depends_on:
       - arc
     ports:
-      - "81:8080"
-      - "1025:1025"
+      - "${OVIYAM_8080}:8080"
+      - "${OVIYAM_1025}:1025"
     volumes:
       - /var/local/placax-reports/oviyam:/usr/local/tomcat/work
   plaxreports:
@@ -66,10 +62,10 @@ services:
     depends_on:
       - reportsdb
       - arc
-    ports:
-      - "5100:80"
-      - "5101:443"
     restart: unless-stopped
+    ports:
+      - "${REPORTSBACK_80}:80"
+      - "${REPORTSBACK_443}:443"
     environment:
         ASPNETCORE_ENVIRONMENT: Development
         OPACSVIEWERURL: https://rxreports.placaxconsulting.com.ar/oviyam/viewer.html
@@ -81,10 +77,11 @@ services:
   reportsdb:
     container_name: reportsdb
     image: mysql:8.0.23
+    restart: unless-stopped
     ports:
       - "${MYSQL_PORT}:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: ${DB_PW}
     volumes:
      - /var/local/placax-reports/reportsdb:/var/lib/mysql
     networks:
@@ -108,9 +105,6 @@ services:
         DBPORT: 3306
         DCM4CHEESERVER: db #192.168.1.81
         DCM4CHEEPORT: 5432
-secrets:
-   db_pw:
-    file: db_pw
 networks:
   default:
       name: dcm4chee_default

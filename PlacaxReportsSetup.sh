@@ -26,4 +26,25 @@ wget -P /var/local/placax-reports/setup/ https://raw.githubusercontent.com/posta
 wget -P /var/local/placax-reports/setup/ https://raw.githubusercontent.com/postar/OpacsTest/main/.env
 
 cd /var/local/placax-reports/setup
+
+generate_password() {
+    pw_length=12  # Longitud de la contraseña
+    pw=$(openssl rand -base64 16 | tr -dc 'a-zA-Z0-9' | head -c "$pw_length")
+    echo "$pw"
+}
+
+# Ruta al archivo de texto existente
+pwFile=".env"
+
+# Generar una contraseña aleatoria
+newPW=$(generate_password)
+
+# Eliminar la última línea del archivo
+sed -i '$d' "$pwFile"
+
+# Agregar la contraseña al archivo de texto
+echo "DB_PW=$newPW" >> "$pwFile"
+
+echo "Contraseña generada y agregada al archivo."
+
 docker compose up -d

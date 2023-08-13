@@ -1,0 +1,118 @@
+services:
+  ldap:
+    container_name: ldap
+    image: dcm4che/slapd-dcm4chee:2.4.44-12.0
+    restart: unless-stopped
+    ports:
+      - "${LDAP_PORT}:389"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /var/local/dcm4chee-arc/ldap:/var/lib/ldap
+      - /var/local/dcm4chee-arc/slapd.d:/etc/ldap/slapd.d  
+  db:
+    container_name: db
+    image: dcm4che/postgres-dcm4chee:10.0-12
+    restart: unless-stopped
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    environment:
+      POSTGRES_DB: pacsdb
+      POSTGRES_USER: pacs
+      POSTGRES_PASSWORD: /run/secrets/db_pw
+    secrets:
+      - db_pw
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /var/local/dcm4chee-arc/db:/var/lib/postgresql/data
+  arc:
+    container_name: arc
+    image: dcm4che/dcm4chee-arc-psql:5.12.0
+    restart: unless-stopped
+    depends_on:
+      - db
+    ports:
+      - "${ARC_PORT8080}:8080"
+      - "${ARC_PORT8443}:8443"
+      - "${ARC_PORT9990}:9990"
+      - "${ARC_PORT11112}:11112"
+      - "${ARC_PORT2575}:2575"
+    environment:
+      POSTGRES_DB: pacsdb
+      POSTGRES_USER: pacs
+      POSTGRES_PASSWORD: /run/secrets/db_pw
+      WILDFLY_WAIT_FOR: ldap:389 db:5432
+    secrets:
+    - db_pw
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /var/local/dcm4chee-arc/wildfly:/opt/wildfly/standalone
+  oviyam:
+    container_name: oviyam
+    image:  postar/oviyam:1.0.2
+    restart: unless-stopped
+    depends_on:
+      - arc
+    ports:
+      - "81:8080"
+      - "1025:1025"
+    volumes:
+      - /oviyam:/usr/local/tomcat/work
+  plaxreports:
+    container_name: plaxreports
+    image:  alejovac/dpacsreports:1.0.1
+    depends_on:
+      - reportsdb
+      - arc
+    ports:
+      - "5100:80"
+      - "5101:443"
+    restart: unless-stopped
+    environment:
+        ASPNETCORE_ENVIRONMENT: Development
+        OPACSVIEWERURL: https://rxreports.placaxconsulting.com.ar/oviyam/viewer.html
+        DBSERVER: reportsdb
+        DBPORT: 3306
+    networks:
+      default:
+        ipv4_address: 172.20.0.33
+  reportsdb:
+    container_name: reportsdb
+    image: mysql:8.0.23
+    ports:
+      - "${MYSQL_PORT}:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+    networks:
+      default:
+        ipv4_address: 172.20.0.44
+  reportsweb:
+    container_name: reportsweb
+    image: alejovac/opacsreportsweb:v1.0.23
+    restart: unless-stopped
+    ports:
+      - "${REPORTS_PORT80}:80"
+      - "${REPORTS_PORT443}:443"
+  reportsworker:
+    container_name: reportsworker
+    image: alejovac/dpacsworker:latest
+    restart: unless-stopped
+    depends_on:
+      - reportsdb
+    environment:
+        DBSERVER: reportsdb #172.20.0.44
+        DBPORT: 3306
+        DCM4CHEESERVER: db #192.168.1.81
+        DCM4CHEEPORT: 5432
+secrets:
+   db_pw:
+    file: db_pw
+networks:
+  default:
+      name: dcm4chee_default
+      driver: bridge
+      ipam:
+        config:
+          - subnet: 172.20.0.0/24

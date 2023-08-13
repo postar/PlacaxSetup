@@ -8,8 +8,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
-      - /var/local/dcm4chee-arc/ldap:/var/lib/ldap
-      - /var/local/dcm4chee-arc/slapd.d:/etc/ldap/slapd.d  
+      - /var/local/placax-reports/ldap:/var/lib/ldap
+      - /var/local/placax-reports/slapd.d:/etc/ldap/slapd.d  
   db:
     container_name: db
     image: dcm4che/postgres-dcm4chee:10.0-12
@@ -25,7 +25,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
-      - /var/local/dcm4chee-arc/db:/var/lib/postgresql/data
+      - /var/local/placax-reports/db:/var/lib/postgresql/data
   arc:
     container_name: arc
     image: dcm4che/dcm4chee-arc-psql:5.12.0
@@ -48,7 +48,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
-      - /var/local/dcm4chee-arc/wildfly:/opt/wildfly/standalone
+      - /var/local/placax-reports/wildfly:/opt/wildfly/standalone
   oviyam:
     container_name: oviyam
     image:  postar/oviyam:1.0.2
@@ -59,7 +59,7 @@ services:
       - "81:8080"
       - "1025:1025"
     volumes:
-      - /oviyam:/usr/local/tomcat/work
+      - /var/local/placax-reports/oviyam:/usr/local/tomcat/work
   plaxreports:
     container_name: plaxreports
     image:  alejovac/dpacsreports:1.0.1
@@ -85,6 +85,8 @@ services:
       - "${MYSQL_PORT}:3306"
     environment:
       MYSQL_ROOT_PASSWORD: secret
+    volumes:
+     - /var/local/placax-reports/reportsdb:/var/lib/mysql
     networks:
       default:
         ipv4_address: 172.20.0.44

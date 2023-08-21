@@ -68,7 +68,7 @@ services:
       - "${REPORTSBACK_443}:443"
     environment:
         ASPNETCORE_ENVIRONMENT: Development
-        OPACSVIEWERURL: https://rxreports.placaxconsulting.com.ar/oviyam/viewer.html
+        OPACSVIEWERURL: ${OPACSVIEWERURL}
         DBSERVER: reportsdb
         DBPORT: 3306
     networks:
@@ -105,6 +105,11 @@ services:
         DBPORT: 3306
         DCM4CHEESERVER: db #192.168.1.81
         DCM4CHEEPORT: 5432
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate run
+    restart: unless-stopped
+    container_name: tunnel
 networks:
   default:
       name: dcm4chee_default

@@ -22,8 +22,8 @@ touch /var/local/placax-reports/logstash/filter-hashtree
 chown 1000:1000 /var/local/placax-reports/logstash/filter-hashtree
 
 mkdir /var/local/placax-reports/setup
-wget -P /var/local/placax-reports/setup/ https://raw.githubusercontent.com/postar/OpacsTest/main/docker-compose.yml
-wget -P /var/local/placax-reports/setup/ https://raw.githubusercontent.com/postar/OpacsTest/main/.env
+wget -P /var/local/placax-reports/setup/ https://raw.githubusercontent.com/postar/PlacaxSetup/main/docker-compose.yml
+wget -P /var/local/placax-reports/setup/ https://raw.githubusercontent.com/postar/PlacaxSetup/main/.env
 
 cd /var/local/placax-reports/setup
 
@@ -46,5 +46,3 @@ sed -i '$d' "$pwFile"
 echo "DB_PW=$newPW" >> "$pwFile"
 
 echo "Contraseña generada y agregada al archivo."
-
-docker compose up -d

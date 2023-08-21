@@ -90,7 +90,7 @@ services:
         ipv4_address: 172.20.0.33
   reportsworker:
     container_name: reportsworker
-    image: alejovac/dpacsworker:1.0.2
+    image: alejovac/dpacsworker:1.0.3
     restart: unless-stopped
     depends_on:
       - reportsdb
@@ -99,6 +99,7 @@ services:
         DBPORT: 3306
         DCM4CHEESERVER: db #192.168.1.81
         DCM4CHEEPORT: 5432
+        DCM4CHEEPASS: ${DB_PW}
         DBPASS: ${DB_PW}
   reportsweb:
     container_name: reportsweb

@@ -37,6 +37,8 @@ chown 1000:1000 /var/local/placax-reports/logstash/filter-hashtree
 mkdir /var/local/placax-reports/setup
 wget -P /var/local/placax-reports/setup/ https://raw.githubusercontent.com/postar/PlacaxSetup/main/docker-compose.yml
 wget -P /var/local/placax-reports/setup/ https://raw.githubusercontent.com/postar/PlacaxSetup/main/.env
+wget -P /var/local/placax-reports/setup/ https://raw.githubusercontent.com/postar/PlacaxSetup/main/nginx.conf
+wget -P /var/local/placax-reports/setup/ https://raw.githubusercontent.com/postar/PlacaxSetup/main/oviyam2-7-config.xml
 
 cd /var/local/placax-reports/setup
 

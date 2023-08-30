@@ -71,7 +71,7 @@ services:
         ipv4_address: 172.20.0.44
   plaxreports:
     container_name: plaxreports
-    image:  alejovac/dpacsreports:1.0.2
+    image:  alejovac/dpacsreports:1.0.3
     depends_on:
       - reportsdb
       - arc
@@ -103,7 +103,7 @@ services:
         DBPASS: ${DB_PW}
   reportsweb:
     container_name: reportsweb
-    image: alejovac/opacsreportsweb:v1.0.26
+    image: alejovac/opacsreportsweb:v1.0.33
     restart: unless-stopped
     ports:
       - "${REPORTS_PORT80}:80"

@@ -1,0 +1,102 @@
+<configuration>
+   <users class="java.util.ArrayList">
+      <user>
+         <user-name>user</user-name>
+         <search-params>
+            <buttons class="java.util.ArrayList">
+               <button>
+                  <button-label>Today CT</button-label>
+                  <date-criteria>t</date-criteria>
+                  <modality>CT</modality>
+                  <auto-refresh>0</auto-refresh>
+               </button>
+            </buttons>
+         </search-params>
+         <theme>Dark Hive</theme>
+         <viewer-slider>hide</viewer-slider>
+         <session-timeout>1800</session-timeout>
+      </user>
+      <user>
+         <user-name>admin</user-name>
+         <search-params>
+            <buttons class="java.util.ArrayList">
+               <button>
+                  <button-label>Today CT</button-label>
+                  <date-criteria>t</date-criteria>
+                  <modality>CT</modality>
+                  <auto-refresh>0</auto-refresh>
+               </button>
+            </buttons>
+         </search-params>
+         <theme>Dark Hive</theme>
+         <viewer-slider>hide</viewer-slider>
+         <session-timeout>1800</session-timeout>
+      </user>
+   </users>
+   <servers class="java.util.ArrayList">
+      <server>
+         <logicalname>DCM4CHEE</logicalname>
+         <aetitle>DCM4CHEE</aetitle>
+         <hostname>arc</hostname>
+         <port>11112</port>
+         <retrieve>WADO</retrieve>
+         <wadocontext>dcm4chee-arc/aets/DCM4CHEE/wado</wadocontext>
+         <wadoport>8080</wadoport>
+         <previews>true</previews>
+         <imageType>JPEG</imageType>
+      </server>
+   </servers>
+   <listener>
+      <aetitle>OVIYAM2</aetitle>
+      <port>1025</port>
+   </listener>
+   <languages class="java.util.ArrayList">
+      <language>
+         <lang>English</lang>
+         <country>United Kingdom</country>
+         <localeID>en_GB</localeID>
+         <selected>true</selected>
+      </language>
+      <language>
+         <lang>Tamil</lang>
+         <country>India</country>
+         <localeID>ta_IN</localeID>
+         <selected>false</selected>
+      </language>
+      <language>
+         <lang>German</lang>
+         <country>Germany</country>
+         <localeID>de_DE</localeID>
+         <selected>false</selected>
+      </language>
+      <language>
+         <lang>Japanese</lang>
+         <country>Japan</country>
+         <localeID>ja_JP</localeID>
+         <selected>false</selected>
+      </language>
+      <language>
+         <lang>Spanish</lang>
+         <country>Spain</country>
+         <localeID>es_ES</localeID>
+         <selected>false</selected>
+      </language>
+      <language>
+         <lang>Russian</lang>
+         <country>Russia</country>
+         <localeID>ru_RU</localeID>
+         <selected>false</selected>
+      </language>
+   </languages>
+   <ioviyam-context>/ioviyam</ioviyam-context>
+   <download-study>No</download-study>
+   <overlayText>
+      <ImageLaterality>
+         <display>Yes</display>
+         <modality>ALL</modality>
+      </ImageLaterality>
+   </overlayText>
+   <nameDisplayConfig>
+      <removeCaretSymbol>Yes</removeCaretSymbol>
+   </nameDisplayConfig>
+</configuration>

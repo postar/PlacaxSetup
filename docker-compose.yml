@@ -71,7 +71,7 @@ services:
         ipv4_address: 172.20.0.44
   plaxreports:
     container_name: plaxreports
-    image:  alejovac/dpacsreports:1.0.2
+    image:  alejovac/dpacsreports:1.0.1
     depends_on:
       - reportsdb
       - arc
@@ -108,6 +108,8 @@ services:
     ports:
       - "${REPORTS_PORT80}:80"
       - "${REPORTS_PORT443}:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
   tunnel:
     image: cloudflare/cloudflared:latest
     command: tunnel --no-autoupdate run

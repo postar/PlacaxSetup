@@ -39,6 +39,9 @@ wget -P /var/local/placax-reports/setup/ https://raw.githubusercontent.com/posta
 wget -P /var/local/placax-reports/setup/ https://raw.githubusercontent.com/postar/PlacaxSetup/main/.env
 wget -P /var/local/placax-reports/setup/ https://raw.githubusercontent.com/postar/PlacaxSetup/main/nginx.conf
 wget -P /var/local/placax-reports/setup/ https://raw.githubusercontent.com/postar/PlacaxSetup/main/oviyam2-7-config.xml
+wget -P /var/local/placax-reports/setup/ https://raw.githubusercontent.com/postar/PlacaxSetup/main/cloudflared.sh
+chmod +x /var/local/placax-reports/setup/cloudflared.sh
+
 
 cd /var/local/placax-reports/setup
 

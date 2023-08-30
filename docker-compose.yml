@@ -71,7 +71,7 @@ services:
         ipv4_address: 172.20.0.44
   plaxreports:
     container_name: plaxreports
-    image:  alejovac/dpacsreports:1.0.1
+    image:  alejovac/dpacsreports:1.0.2
     depends_on:
       - reportsdb
       - arc

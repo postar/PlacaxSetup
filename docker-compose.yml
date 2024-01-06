@@ -69,38 +69,38 @@ services:
     networks:
       default:
         ipv4_address: 172.20.0.44
-  plaxreports:
-    container_name: plaxreports
-    image:  alejovac/dpacsreports:1.0.2
+  api:
+    container_name: api
+    image:  alejovac/mesyapi:1.0.4
     depends_on:
       - reportsdb
       - arc
     restart: unless-stopped
     ports:
-      - "${REPORTSBACK_80}:80"
-      - "${REPORTSBACK_443}:443"
+      - "${API_80}:80"
+      - "${API_443}:443"
     environment:
         ASPNETCORE_ENVIRONMENT: Development
-        OPACSVIEWERURL: ${OPACSVIEWERURL}
         DBSERVER: reportsdb
         DBPORT: 3306
         DBPASS: ${DB_PW}
     networks:
       default:
         ipv4_address: 172.20.0.33
-  reportsworker:
-    container_name: reportsworker
-    image: alejovac/dpacsworker:1.0.3
+  worker:
+    container_name: worker
+    image: alejovac/mesyworkerdcm4chee:1.0.0
     restart: unless-stopped
     depends_on:
       - reportsdb
     environment:
-        DBSERVER: reportsdb #172.20.0.44
-        DBPORT: 3306
-        DCM4CHEESERVER: db #192.168.1.81
-        DCM4CHEEPORT: 5432
-        DCM4CHEEPASS: ${DB_PW}
-        DBPASS: ${DB_PW}
+        WORKERNAME: Test01
+        APIURI: http://api:80/
+        PACSSERVER: db
+        PACSPORT: 5432
+        PACSDB: pacsdb
+        PACSUSER: pacs
+        PACSPASS: ${DB_PW}
   reportsweb:
     container_name: reportsweb
     image: alejovac/opacsreportsweb:v1.0.33

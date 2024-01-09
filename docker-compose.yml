@@ -71,7 +71,7 @@ services:
         ipv4_address: 172.20.0.44
   api:
     container_name: api
-    image:  alejovac/mesyapi:1.0.5
+    image:  alejovac/mesyapi:1.0.8
     depends_on:
       - reportsdb
       - arc
@@ -101,9 +101,9 @@ services:
         PACSDB: pacsdb
         PACSUSER: pacs
         PACSPASS: ${DB_PW}
-  reportsweb:
-    container_name: reportsweb
-    image: alejovac/opacsreportsweb:v1.0.33
+  adminweb:
+    container_name: adminweb
+    image: alejovac/mesyweb:v1.0.7b
     restart: unless-stopped
     ports:
       - "${REPORTS_PORT80}:80"

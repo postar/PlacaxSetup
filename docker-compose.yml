@@ -71,7 +71,7 @@ services:
         ipv4_address: 172.20.0.44
   api:
     container_name: api
-    image:  alejovac/mesyapi:1.0.8
+    image:  alejovac/mesyapi:1.0.10
     depends_on:
       - reportsdb
       - arc

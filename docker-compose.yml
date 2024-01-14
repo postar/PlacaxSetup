@@ -71,7 +71,7 @@ services:
         ipv4_address: 172.20.0.44
   api:
     container_name: api
-    image:  alejovac/mesyapi:1.0.10
+    image:  alejovac/mesyapi:1.1.0
     depends_on:
       - reportsdb
       - arc
@@ -109,7 +109,7 @@ services:
       - "${REPORTS_PORT80}:80"
       - "${REPORTS_PORT443}:443"
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
+      - /var/local/placax-reports/setup/nginx.conf:/etc/nginx/nginx.conf
   tunnel:
     image: cloudflare/cloudflared:latest
     command: tunnel --no-autoupdate run --token ${TUNNEL_TOKEN}

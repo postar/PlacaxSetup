@@ -33,6 +33,11 @@ chgrp 0 /var/local/placax-reports/esdatadir
 mkdir -p /var/local/placax-reports/logstash
 touch /var/local/placax-reports/logstash/filter-hashtree
 chown 1000:1000 /var/local/placax-reports/logstash/filter-hashtree
+mkdir -p /var/local/placax-reports/backups
+wget -P /var/local/placax-reports/backups https://raw.githubusercontent.com/postar/PlacaxSetup/main/backup.sh
+wget -P /var/local/placax-reports/backups https://raw.githubusercontent.com/postar/PlacaxSetup/main/restore.sh
+chmod +x /var/local/placax-reports/backups/restore.sh
+chmod +x /var/local/placax-reports/backups/backup.sh
 
 mkdir /var/local/placax-reports/setup
 wget -P /var/local/placax-reports/setup/ https://raw.githubusercontent.com/postar/PlacaxSetup/main/docker-compose.yml

@@ -26,7 +26,4 @@ tar -czvf "$backup_dir/$current_date/oviyam_backup_$current_date.tar.gz" -C /var
 # Backup reportsdb service
 tar -czvf "$backup_dir/$current_date/reportsdb_backup_$current_date.tar.gz" -C /var/local/placax-reports/reportsdb .
 
-# Backup adminweb service
-tar -czvf "$backup_dir/$current_date/adminweb_backup_$current_date.tar.gz" -C /var/local/placax-reports/setup/nginx.conf nginx.conf
-
 echo "Backup completed. Backup files are in: $backup_dir"

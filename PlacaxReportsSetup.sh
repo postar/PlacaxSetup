@@ -24,6 +24,9 @@ echo 'deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudf
 # install cloudflared
 sudo apt-get update && sudo apt-get install cloudflared -y
 
+# install rclone
+sudo curl https://rclone.org/install.sh | sudo bash
+
 sysctl -w vm.swappiness=1
 echo 'vm.swappiness=1' >> /etc/sysctl.conf
 sysctl -w vm.max_map_count=262144

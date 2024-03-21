@@ -17,6 +17,7 @@ services:
     ports:
       - "${POSTGRES_PORT}:5432"
     environment:
+      TZ: "America/Argentina/Buenos_Aires"
       POSTGRES_DB: pacsdb
       POSTGRES_USER: pacs
       POSTGRES_PASSWORD: ${DB_PW}
@@ -37,6 +38,7 @@ services:
       - "${ARC_PORT11112}:11112"
       - "${ARC_PORT2575}:2575"
     environment:
+      TZ: "America/Argentina/Buenos_Aires"
       POSTGRES_DB: pacsdb
       POSTGRES_USER: pacs
       POSTGRES_PASSWORD: ${DB_PW}
@@ -63,6 +65,7 @@ services:
     ports:
       - "${MYSQL_PORT}:3306"
     environment:
+      TZ: "America/Argentina/Buenos_Aires"
       MYSQL_ROOT_PASSWORD: ${DB_PW}
     volumes:
      - /var/local/placax-reports/reportsdb:/var/lib/mysql
@@ -71,7 +74,7 @@ services:
         ipv4_address: 172.20.0.44
   api:
     container_name: api
-    image:  alejovac/mesyapi:1.1.10
+    image:  alejovac/mesyapi:2.0.1
     depends_on:
       - reportsdb
       - arc
@@ -80,36 +83,66 @@ services:
       - "${API_80}:80"
       - "${API_443}:443"
     environment:
-        ASPNETCORE_ENVIRONMENT: Development
-        DBSERVER: reportsdb
-        DBPORT: 3306
-        DBPASS: ${DB_PW}
+      TZ: "America/Argentina/Buenos_Aires"
+      ASPNETCORE_ENVIRONMENT: Development
+      DBSERVER: reportsdb
+      DBPORT: 3306
+      DBPASS: ${DB_PW}
     networks:
       default:
         ipv4_address: 172.20.0.33
+  ppapi:
+    container_name: ppapi
+    image:  alejovac/mesypatientportalapi:2.0.1
+    depends_on:
+      - reportsdb
+      - arc
+    restart: unless-stopped
+    ports:
+      - "5200:8080"
+      - "5201:443"
+    environment:
+      TZ: "America/Argentina/Buenos_Aires"
+      ASPNETCORE_ENVIRONMENT: Development
+      DBSERVER: reportsdb
+      DBPORT: 3306
+      DBPASS: ${DB_PW}
+    networks:
+      default:
+        ipv4_address: 172.20.0.34
   worker:
     container_name: worker
-    image: alejovac/mesyworkerdcm4chee:1.1.2
+    image: alejovac/mesyworkerdcm4chee:2.0.1
     restart: unless-stopped
     depends_on:
       - reportsdb
     environment:
-        WORKERNAME: Test01
-        APIURI: http://api:80/
-        PACSSERVER: db
-        PACSPORT: 5432
-        PACSDB: pacsdb
-        PACSUSER: pacs
-        PACSPASS: ${DB_PW}
+      TZ: "America/Argentina/Buenos_Aires"
+      WORKERNAME: Servidor Demo
+      APIURI: http://api:80/
+      PACSSERVER: db
+      PACSPORT: 5432
+      PACSDB: pacsdb
+      PACSUSER: pacs
+      PACSPASS: ${DB_PW}
   adminweb:
     container_name: adminweb
-    image: alejovac/mesyweb:v1.1.1
+    image: alejovac/mesyweb:1.2.1
     restart: unless-stopped
     ports:
       - "${REPORTS_PORT80}:80"
       - "${REPORTS_PORT443}:443"
     volumes:
-      - /var/local/placax-reports/setup/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx.conf:/etc/nginx/nginx.conf
+  ppweb:
+    container_name: patientportalweb
+    image: alejovac/mesyppweb:v1.1.0
+    restart: unless-stopped
+    ports:
+      - "90:80"
+      - "999:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
   tunnel:
     image: cloudflare/cloudflared:latest
     command: tunnel --no-autoupdate run --token ${TUNNEL_TOKEN}

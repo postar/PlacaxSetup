@@ -89,7 +89,7 @@ services:
       DBPORT: 3306
       DBPASS: ${DB_PW}
     volumes:
-     - /var/local/placax-reports/api/:/license
+     - /var/local/placax-reports/api/:/app/license
     networks:
       default:
         ipv4_address: 172.20.0.33

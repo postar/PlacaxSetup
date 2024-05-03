@@ -49,7 +49,7 @@ services:
       - /var/local/placax-reports/wildfly:/opt/wildfly/standalone
   oviyam:
     container_name: oviyam
-    image:  postar/oviyam:1.0.3
+    image:  postar/oviyam:1.0.4
     restart: unless-stopped
     depends_on:
       - arc

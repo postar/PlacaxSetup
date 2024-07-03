@@ -49,6 +49,9 @@ wget -P /var/local/mesy-reports/setup/ https://raw.githubusercontent.com/postar/
 wget -P /var/local/mesy-reports/setup/ https://raw.githubusercontent.com/postar/PlacaxSetup/main/nginx.conf
 wget -P /var/local/mesy-reports/setup/ https://raw.githubusercontent.com/postar/PlacaxSetup/main/oviyam2-7-config.xml
 
+mkdir /var/local/mesy-reports/ohif
+wget -P /var/local/mesy-reports/ohif/ https://raw.githubusercontent.com/postar/PlacaxSetup/main/ohif/app-config.js
+wget -P /var/local/mesy-reports/ohif/ https://raw.githubusercontent.com/postar/PlacaxSetup/main/ohif/ngnix.conf
 
 cd /var/local/mesy-reports/setup
 

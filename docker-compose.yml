@@ -1,18 +1,28 @@
 services:
   ldap:
     container_name: ldap
-    image: dcm4che/slapd-dcm4chee:2.4.44-12.0
+    image: dcm4che/slapd-dcm4chee:2.6.6-32.0
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+    environment:
+      STORAGE_DIR: /storage/fs1
     restart: unless-stopped
     ports:
       - "${LDAP_PORT}:389"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
-      - /var/local/placax-reports/ldap:/var/lib/ldap
-      - /var/local/placax-reports/slapd.d:/etc/ldap/slapd.d
+      - /var/local/mesy-reports/dcm4chee/ldap:/var/lib/openldap/openldap-data
+      - /var/local/mesy-reports/dcm4chee/slapd.d:/etc/openldap/slapd.d
   db:
     container_name: db
-    image: dcm4che/postgres-dcm4chee:10.0-12
+    image: dcm4che/postgres-dcm4chee:16.2-32
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
     restart: unless-stopped
     ports:
       - "${POSTGRES_PORT}:5432"
@@ -24,40 +34,39 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
-      - /var/local/placax-reports/db:/var/lib/postgresql/data
+      - /var/local/mesy-reports/dcm4chee/db:/var/lib/postgresql/data
   arc:
     container_name: arc
-    image: dcm4che/dcm4chee-arc-psql:5.12.0
+    image: dcm4che/dcm4chee-arc-psql:5.32.0
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
     restart: unless-stopped
     depends_on:
       - db
+      - ldap
     ports:
       - "${ARC_PORT8080}:8080"
       - "${ARC_PORT8443}:8443"
       - "${ARC_PORT9990}:9990"
       - "${ARC_PORT11112}:11112"
       - "${ARC_PORT2575}:2575"
+      - "${ARC_PORT9993}:9993"
+      - "${ARC_PORT2672}:2762"
+      - "${ARC_PORT12575}:12575"
     environment:
       TZ: "America/Argentina/Buenos_Aires"
       POSTGRES_DB: pacsdb
       POSTGRES_USER: pacs
       POSTGRES_PASSWORD: ${DB_PW}
       WILDFLY_WAIT_FOR: ldap:389 db:5432
+      WILDFLY_CHOWN: /storage
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
-      - /var/local/placax-reports/wildfly:/opt/wildfly/standalone
-  oviyam:
-    container_name: oviyam
-    image:  postar/oviyam:1.0.4
-    restart: unless-stopped
-    depends_on:
-      - arc
-    ports:
-      - "${OVIYAM_8080}:8080"
-      - "${OVIYAM_1025}:1025"
-    volumes:
-      - /var/local/placax-reports/oviyam:/usr/local/tomcat/work
+      - /var/local/mesy-reports/dcm4chee/arc/wildfly:/opt/wildfly/standalone
+      - /var/local/mesy-reports/dcm4chee/arc/storage:/storage
   reportsdb:
     container_name: reportsdb
     image: mysql:8.0.23
@@ -68,13 +77,40 @@ services:
       TZ: "America/Argentina/Buenos_Aires"
       MYSQL_ROOT_PASSWORD: ${DB_PW}
     volumes:
-     - /var/local/placax-reports/reportsdb:/var/lib/mysql
+     - /var/local/mesy-reports/mesy/reportsdb:/var/lib/mysql
     networks:
       default:
         ipv4_address: 172.20.0.44
+  ohif:
+    container_name: ohif
+    image: alejovac/messy-ohif-viewer:3.8.0
+    restart: unless-stopped
+    ports:
+      - "${OHIF_80}:80"
+    environment:
+      NODE_ENV: "production"
+      PUBLIC_URL: "/ohif/"
+    volumes:
+      - /var/local/mesy-reports/ohif/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:ro
+      - /var/local/mesy-reports/ohif/app-config.js:/usr/share/nginx/html/app-config.js
+#      - /var/local/mesy-reports/ohif/serve.json:/usr/
+    networks:
+      default:
+        ipv4_address: 172.20.0.60
+  oviyam:
+    container_name: oviyam
+    image:  postar/oviyam:1.0.4
+    restart: unless-stopped
+    depends_on:
+      - arc
+    ports:
+      - "${OVIYAM_8080}:8080"
+      - "${OVIYAM_1025}:1025"
+    volumes:
+      - /var/local/mesy-reports/oviyam:/usr/local/tomcat/work
   api:
     container_name: api
-    image:  alejovac/mesyapi:2.0.3
+    image:  alejovac/mesyapi:2.5.2
     depends_on:
       - reportsdb
       - arc
@@ -89,32 +125,32 @@ services:
       DBPORT: 3306
       DBPASS: ${DB_PW}
     volumes:
-     - /var/local/placax-reports/api/:/app/license
+     - /var/local/mesy-reports/mesy/api/:/app/license
     networks:
       default:
         ipv4_address: 172.20.0.33
-  ppapi:
-    container_name: ppapi
-    image:  alejovac/mesypatientportalapi:2.0.2
-    depends_on:
-      - reportsdb
-      - arc
-    restart: unless-stopped
-    ports:
-      - "5200:8080"
-      - "5201:443"
-    environment:
-      TZ: "America/Argentina/Buenos_Aires"
-      ASPNETCORE_ENVIRONMENT: Development
-      DBSERVER: reportsdb
-      DBPORT: 3306
-      DBPASS: ${DB_PW}
-    networks:
-      default:
-        ipv4_address: 172.20.0.34
+#  ppapi:
+#    container_name: ppapi
+#    image:  alejovac/mesypatientportalapi:2.0.2
+#    depends_on:
+#      - reportsdb
+#      - arc
+#    restart: unless-stopped
+#    ports:
+#      - "5200:8080"
+#      - "5201:443"
+#    environment:
+#      TZ: "America/Argentina/Buenos_Aires"
+#      ASPNETCORE_ENVIRONMENT: Development
+#      DBSERVER: reportsdb
+#      DBPORT: 3306
+#      DBPASS: ${DB_PW}
+#    networks:
+#      default:
+#        ipv4_address: 172.20.0.34
   worker:
     container_name: worker
-    image: alejovac/mesyworkerdcm4chee:2.0.1
+    image: alejovac/mesyworkerdcm4chee:2.5.0
     restart: unless-stopped
     depends_on:
       - reportsdb
@@ -129,22 +165,22 @@ services:
       PACSPASS: ${DB_PW}
   adminweb:
     container_name: adminweb
-    image: alejovac/mesyweb:1.2.1
+    image: alejovac/mesyweb:2.5.3
     restart: unless-stopped
     ports:
       - "${REPORTS_PORT80}:80"
       - "${REPORTS_PORT443}:443"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
-  ppweb:
-    container_name: patientportalweb
-    image: alejovac/mesyppweb:v1.1.0
-    restart: unless-stopped
-    ports:
-      - "90:80"
-      - "999:443"
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
+#  ppweb:
+#    container_name: patientportalweb
+#    image: alejovac/mesyppweb:v1.1.0
+#    restart: unless-stopped
+#    ports:
+#      - "90:80"
+#      - "999:443"
+#    volumes:
+#      - ./nginx.conf:/etc/nginx/nginx.conf
   tunnel:
     image: cloudflare/cloudflared:latest
     command: tunnel --no-autoupdate run --token ${TUNNEL_TOKEN}

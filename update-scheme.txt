@@ -1,0 +1,29 @@
+docker exec db1 update-schema 5.11
+docker exec db1 update-schema 5.12
+docker exec db1 update-schema 5.13
+docker exec db1 update-schema 5.14
+docker exec db1 update-schema 5.15
+docker exec db1 update-schema 5.16
+docker exec db1 update-schema 5.17
+docker exec db1 update-schema 5.18
+docker exec db1 update-schema 5.19
+docker exec db1 update-schema 5.20
+docker exec db1 update-schema 5.21
+docker exec db1 update-schema 5.22
+docker exec db1 update-schema 5.23
+docker exec db1 update-schema 5.24
+docker exec db1 update-schema 5.25
+docker exec db1 update-schema 5.26
+docker exec db1 update-schema 5.27
+docker exec db1 update-schema 5.28
+docker exec db1 update-schema 5.29
+docker exec db1 update-schema 5.30
+docker exec db1 update-schema 5.31
+docker exec db1 update-schema 5.32
+
+
+
+cp -r -u /var/local/placax-reports/wildfly-old/data/fs1 /var/local/mesy-reports/dcm4chee/arc/storage/fs1
+cp -r -u /var/local/placax-reports/wildfly-old/data /var/local/mesy-reports/dcm4chee/arc/wildfly
+*cp -r -u /var/local/placax-reports/ldap /var/local/mesy-reports/dcm4chee/ldap
+*cp -r -u /var/local/placax-reports/slapd.d /var/local/mesy-reports/dcm4chee/slapd.d

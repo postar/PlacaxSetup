@@ -51,7 +51,7 @@ wget -P /var/local/mesy-reports/setup/ https://raw.githubusercontent.com/postar/
 
 mkdir /var/local/mesy-reports/ohif
 wget -P /var/local/mesy-reports/ohif/ https://raw.githubusercontent.com/postar/PlacaxSetup/main/ohif/app-config.js
-wget -P /var/local/mesy-reports/ohif/ https://raw.githubusercontent.com/postar/PlacaxSetup/main/ohif/ngnix.conf
+wget -P /var/local/mesy-reports/ohif/ https://raw.githubusercontent.com/postar/PlacaxSetup/main/ohif/nginx.conf
 
 cd /var/local/mesy-reports/setup
 

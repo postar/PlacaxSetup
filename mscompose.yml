@@ -452,9 +452,6 @@ services:
       - /var/local/mesy-reports/ohif/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:ro
       - /var/local/mesy-reports/ohif/app-config.js:/usr/share/nginx/html/app-config.js
 #      - /var/local/mesy-reports/ohif/serve.json:/usr/
-    networks:
-      default:
-        ipv4_address: 172.20.0.60
   oviyam:
     container_name: oviyam
     image:  postar/oviyam:1.0.4

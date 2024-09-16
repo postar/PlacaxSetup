@@ -11,7 +11,6 @@ echo \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
-sudo apt-get install rclone -y
 
 echo "Installing Cloudflared"
 # Add cloudflare gpg key
@@ -48,6 +47,8 @@ wget -P /var/local/mesy-reports/setup/ https://raw.githubusercontent.com/postar/
 wget -P /var/local/mesy-reports/setup/ https://raw.githubusercontent.com/postar/PlacaxSetup/main/.env
 wget -P /var/local/mesy-reports/setup/ https://raw.githubusercontent.com/postar/PlacaxSetup/main/nginx.conf
 wget -P /var/local/mesy-reports/setup/ https://raw.githubusercontent.com/postar/PlacaxSetup/main/oviyam2-7-config.xml
+wget -P /var/local/mesy-reports/setup/ https://raw.githubusercontent.com/postar/PlacaxSetup/main/update-system.sh
+chmox +x /var/local/mesy-reports/setup/update-system.sh
 
 mkdir /var/local/mesy-reports/ohif
 wget -P /var/local/mesy-reports/ohif/ https://raw.githubusercontent.com/postar/PlacaxSetup/main/ohif/app-config.js

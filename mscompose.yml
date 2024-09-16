@@ -361,7 +361,7 @@ services:
       TZ: "America/Argentina/Buenos_Aires"
   msuser:
     container_name: msuser
-    image: alejovac/mesymsuser:0.1.0
+    image: alejovac/mesymsuser:0.1.0-alpine
     restart: unless-stopped
     depends_on:
       - reportsdb
@@ -441,10 +441,31 @@ services:
 #    network_mode: "host"
   ohif:
     container_name: ohif
-    image: ohif/app:latest
+    image: alejovac/messy-ohif-viewer:3.8.0
     restart: unless-stopped
     ports:
-      - "82:80"
+      - "${OHIF_80}:80"
+    environment:
+      NODE_ENV: "production"
+      PUBLIC_URL: "/ohif/"
+    volumes:
+      - /var/local/mesy-reports/ohif/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:ro
+      - /var/local/mesy-reports/ohif/app-config.js:/usr/share/nginx/html/app-config.js
+#      - /var/local/mesy-reports/ohif/serve.json:/usr/
+    networks:
+      default:
+        ipv4_address: 172.20.0.60
+  oviyam:
+    container_name: oviyam
+    image:  postar/oviyam:1.0.4
+    restart: unless-stopped
+    depends_on:
+      - arc
+    ports:
+      - "${OVIYAM_8080}:8080"
+      - "${OVIYAM_1025}:1025"
+    volumes:
+      - /var/local/mesy-reports/oviyam:/usr/local/tomcat/work
 networks:
   default:
       name: dcm4chee_default

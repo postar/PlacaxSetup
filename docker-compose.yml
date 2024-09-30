@@ -418,7 +418,7 @@ services:
       - msworker
     environment:
       TZ: "America/Argentina/Buenos_Aires"
-      WORKERNAME: Demo
+      WORKERNAME: Servidor Demo
       APIURI: http://reportsapi:8080
       PACSSERVER: db
       PACSPORT: 5432

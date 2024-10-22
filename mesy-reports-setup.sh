@@ -53,6 +53,8 @@ chmox +x /var/local/mesy-reports/setup/update-system.sh
 mkdir /var/local/mesy-reports/ohif
 wget -P /var/local/mesy-reports/ohif/ https://raw.githubusercontent.com/postar/PlacaxSetup/main/ohif/app-config.js
 wget -P /var/local/mesy-reports/ohif/ https://raw.githubusercontent.com/postar/PlacaxSetup/main/ohif/nginx.conf
+wget -P /var/local/mesy-reports/ohif/ https://raw.githubusercontent.com/postar/PlacaxSetup/main/ohif/app-config-local.js
+wget -P /var/local/mesy-reports/ohif/ https://raw.githubusercontent.com/postar/PlacaxSetup/main/ohif/nginx-local.conf
 
 cd /var/local/mesy-reports/setup
 

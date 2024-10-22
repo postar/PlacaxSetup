@@ -453,7 +453,18 @@ services:
     volumes:
       - /var/local/mesy-reports/ohif/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:ro
       - /var/local/mesy-reports/ohif/app-config.js:/usr/share/nginx/html/app-config.js
-#      - /var/local/mesy-reports/ohif/serve.json:/usr/
+  ohiflocal:
+    container_name: ohiflocal
+    image: alejovac/mesys-ohifl-viewer:3.8.0
+    restart: unless-stopped
+    ports:
+      - "${OHIF_Local}:80"
+    environment:
+      NODE_ENV: "production"
+      PUBLIC_URL: "/ohifl/"
+    volumes:
+      - /var/local/mesy-reports/ohif/nginx-local.conf:/usr/local/openresty/nginx/conf/nginx.conf:ro
+      - /var/local/mesy-reports/ohif/app-config-local.js:/usr/share/nginx/html/app-config.js
   oviyam:
     container_name: oviyam
     image:  postar/oviyam:1.0.4

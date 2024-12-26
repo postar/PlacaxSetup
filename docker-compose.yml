@@ -81,7 +81,7 @@ services:
      - /var/local/mesy-reports/mesy/reportsdb:/var/lib/mysql
   reportsapi:
     container_name: reportsapi
-    image: alejovac/mesyapireports:0.1.0
+    image: alejovac/mesyapireports:0.1.1
     restart: unless-stopped
     depends_on:
       - reportsdb
@@ -332,7 +332,7 @@ services:
       TZ: "America/Argentina/Buenos_Aires"
   mssystemconfiguration:
     container_name: mssystemconfiguration
-    image: alejovac/mesymssystemconfiguration:0.1.0
+    image: alejovac/mesymssystemconfiguration:0.1.1
     restart: unless-stopped
     depends_on:
       - reportsdb
@@ -393,7 +393,7 @@ services:
   mslicense:
     container_name: mslicense
     user: root
-    image: alejovac/mesymslicense:0.1.0
+    image: alejovac/mesymslicense:0.1.1
     restart: unless-stopped
     volumes:
      - /var/local/mesy-reports/mesy/api/:/app/license

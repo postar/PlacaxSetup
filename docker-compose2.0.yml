@@ -81,7 +81,7 @@ services:
      - /var/local/mesy-reports/mesy/reportsdb:/var/lib/mysql
   reportsapi:
     container_name: reportsapi
-    image: alejovac/mesyapireports:2.0.0
+    image: mesys.azurecr.io/mesys-api-reports:latest
     restart: unless-stopped
     depends_on:
       - reportsdb
@@ -96,7 +96,7 @@ services:
       TZ: "America/Argentina/Buenos_Aires"
   yourhealthapi:
     container_name: yourhealthapi
-    image: alejovac/mesyapireports:2.0.0
+    image: mesys.azurecr.io/mesys-api-yourhealth:latest
     restart: unless-stopped
     depends_on:
       - reportsdb
@@ -112,7 +112,7 @@ services:
   gworchestrator:
     container_name: gworchestrator
     user: root
-    image: alejovac/mesygworchestrator:2.0.0
+    image: mesys.azurecr.io/mesys-gw-orchestrator:latest
     restart: unless-stopped
     depends_on:
       - reportsdb
@@ -165,7 +165,7 @@ services:
       TZ: "America/Argentina/Buenos_Aires"
   msidentity:
     container_name: msidentity
-    image: alejovac/mesymsidentity:2.0.0
+    image: mesys.azurecr.io/mesys-ms-identity:latest
     restart: unless-stopped
     depends_on:
       - reportsdb
@@ -179,7 +179,7 @@ services:
       TZ: "America/Argentina/Buenos_Aires"
   mscarousel:
     container_name: mscarousel
-    image: alejovac/mesymscarousel:2.0.0
+    image: mesys.azurecr.io/mesys-ms-carousel:latest
     restart: unless-stopped
     depends_on:
       - reportsdb
@@ -194,7 +194,7 @@ services:
       TZ: "America/Argentina/Buenos_Aires"
   msclient:
     container_name: msclient
-    image: alejovac/mesymsclient:2.0.0
+    image: mesys.azurecr.io/mesys-ms-client:latest
     restart: unless-stopped
     depends_on:
       - reportsdb
@@ -209,7 +209,7 @@ services:
       TZ: "America/Argentina/Buenos_Aires"
   msdepartment:
     container_name: msdepartment
-    image: alejovac/mesymsdepartment:2.0.0
+    image: mesys.azurecr.io/mesys-ms-department:latest
     restart: unless-stopped
     ports:
       - "8089:8080"
@@ -227,7 +227,7 @@ services:
       TZ: "America/Argentina/Buenos_Aires"
   msinstitution:
     container_name: msinstitution
-    image: alejovac/mesymsinstitution:2.0.0
+    image: mesys.azurecr.io/mesys-ms-institution:latest
     restart: unless-stopped
     depends_on:
       - reportsdb
@@ -242,7 +242,7 @@ services:
       TZ: "America/Argentina/Buenos_Aires"
   msinstitutiontag:
     container_name: msinstitutiontag
-    image: alejovac/mesymsinstitutiontag:2.0.0
+    image: mesys.azurecr.io/mesys-ms-institutiontag:latest
     restart: unless-stopped
     depends_on:
       - reportsdb
@@ -255,9 +255,24 @@ services:
       DBPASS: ${DB_PW}
       ROUTERURI: "http://gworchestrator:8080"
       TZ: "America/Argentina/Buenos_Aires"
+  msmailing:
+    container_name: msmailing
+    image: mesys.azurecr.io/mesys-ms-mailing:latest
+    restart: unless-stopped
+    depends_on:
+      - reportsdb
+      - gworchestrator
+      - reportsapi
+      - msinstitutiontag
+    environment:
+      DBSERVER: "reportsdb"
+      DBPORT: "3306"
+      DBPASS: ${DB_PW}
+      ROUTERURI: "http://gworchestrator:8080"
+      TZ: "America/Argentina/Buenos_Aires"
   mspatient:
     container_name: mspatient
-    image: alejovac/mesymspatient:2.0.0
+    image: mesys.azurecr.io/mesys-ms-patient:latest
     restart: unless-stopped
     depends_on:
       - reportsdb
@@ -272,7 +287,7 @@ services:
       TZ: "America/Argentina/Buenos_Aires"
   msreport:
     container_name: msreport
-    image: alejovac/mesymsreport:2.0.0
+    image: mesys.azurecr.io/mesys-ms-report:latest
     restart: unless-stopped
     depends_on:
       - reportsdb
@@ -287,7 +302,7 @@ services:
       TZ: "America/Argentina/Buenos_Aires"
   msreporttemplate:
     container_name: msreporttemplate
-    image: alejovac/mesymsreporttemplate:2.0.0
+    image: mesys.azurecr.io/mesys-ms-reporttemplate:latest
     restart: unless-stopped
     depends_on:
       - reportsdb
@@ -302,7 +317,7 @@ services:
       TZ: "America/Argentina/Buenos_Aires"
   msstation:
     container_name: msstation
-    image: alejovac/mesymsstation:2.0.0
+    image: mesys.azurecr.io/mesys-ms-station:latest
     restart: unless-stopped
     depends_on:
       - reportsdb
@@ -317,7 +332,22 @@ services:
       TZ: "America/Argentina/Buenos_Aires"
   msstudy:
     container_name: msstudy
-    image: alejovac/mesymsstudy:2.0.0
+    image: mesys.azurecr.io/mesys-ms-study:latest
+    restart: unless-stopped
+    depends_on:
+      - reportsdb
+      - gworchestrator
+      - reportsapi
+      - msstation
+    environment:
+      DBSERVER: "reportsdb"
+      DBPORT: "3306"
+      DBPASS: ${DB_PW}
+      ROUTERURI: "http://gworchestrator:8080"
+      TZ: "America/Argentina/Buenos_Aires"
+  msstudystep:
+    container_name: msstudystep
+    image: mesys.azurecr.io/mesys-ms-studystep:latest
     restart: unless-stopped
     depends_on:
       - reportsdb
@@ -332,7 +362,7 @@ services:
       TZ: "America/Argentina/Buenos_Aires"
   msstudyviewer:
     container_name: msstudyviewer
-    image: alejovac/mesymsstudyviewer:2.0.0
+    image: mesys.azurecr.io/mesys-ms-studyviewer:latest
     restart: unless-stopped
     depends_on:
       - reportsdb
@@ -347,7 +377,7 @@ services:
       TZ: "America/Argentina/Buenos_Aires"
   mssystemconfiguration:
     container_name: mssystemconfiguration
-    image: alejovac/mesymssystemconfiguration:2.0.0
+    image: mesys.azurecr.io/mesys-ms-systemconfiguration:latest
     restart: unless-stopped
     depends_on:
       - reportsdb
@@ -362,7 +392,7 @@ services:
       TZ: "America/Argentina/Buenos_Aires"
   mssystemrol:
     container_name: mssystemrol
-    image: alejovac/mesymssystemrol:2.0.0
+    image: mesys.azurecr.io/mesys-ms-systemrol:latest
     restart: unless-stopped
     depends_on:
       - reportsdb
@@ -377,7 +407,7 @@ services:
       TZ: "America/Argentina/Buenos_Aires"
   msuser:
     container_name: msuser
-    image: alejovac/mesymsuser:2.0.0-alpine
+    image: mesys.azurecr.io/mesymsuser:latest
     restart: unless-stopped
     depends_on:
       - reportsdb
@@ -392,7 +422,7 @@ services:
       TZ: "America/Argentina/Buenos_Aires"
   msworker:
     container_name: msworker
-    image: alejovac/mesymsworker:2.0.0
+    image: mesys.azurecr.io/mesys-ms-worker:latest
     restart: unless-stopped
     depends_on:
       - reportsdb
@@ -408,7 +438,7 @@ services:
   mslicense:
     container_name: mslicense
     user: root
-    image: alejovac/mesymslicense:2.0.0
+    image: mesys.azurecr.io/mesys-ms-license:latest
     restart: unless-stopped
     volumes:
      - /var/local/mesy-reports/mesy/api/:/app/license
@@ -426,7 +456,7 @@ services:
 #############################################
   worker:
     container_name: worker
-    image: alejovac/mesywkdcm4chee:2.0.0-V5.32
+    image: mesys.azurecr.io/mesys-wk-dcm4chee-v5x32:latest
     restart: unless-stopped
     depends_on:
       - reportsdb
@@ -442,22 +472,22 @@ services:
       PACSPASS: ${DB_PW}
   adminweb:
     container_name: adminweb
-    image: alejovac/mesyadmin:2.0.0
+    image: mesys.azurecr.io/mesys-frontend:latest
     restart: unless-stopped
     ports:
       - "${REPORTS_PORT80}:80"
       - "${REPORTS_PORT443}:443"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
-  yourhealthweb:
-    container_name: yourhealthweb
-    image: alejovac/mesyadmin:2.0.0
-    restart: unless-stopped
-    ports:
-      - "${REPORTS_PORT80}:80"
-      - "${REPORTS_PORT443}:443"
-    volumes:
-      - ./nginxyh.conf:/etc/nginx/nginx.conf
+#  yourhealthweb:
+#    container_name: yourhealthweb
+#    image: mesys.azurecr.io/mesys-frontend:latest
+#    restart: unless-stopped
+#    ports:
+#      - "${REPORTS_PORT80}:80"
+#      - "${REPORTS_PORT443}:443"
+#    volumes:
+#      - ./nginxyh.conf:/etc/nginx/nginx.conf
 #################################
   tunnel:
     image: cloudflare/cloudflared:latest

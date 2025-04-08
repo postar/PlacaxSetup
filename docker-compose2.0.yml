@@ -101,8 +101,8 @@ services:
     depends_on:
       - reportsdb
     ports:
-      - "${API_80}:8080"
-      - "${API_443}:8081"
+      - "${YHAPI_80}:8080"
+      - "${YHAPI_443}:8081"
     environment:
       DBSERVER: "reportsdb"
       DBPORT: "3306"
@@ -163,20 +163,20 @@ services:
       LICENSESERVICE_HOST: "mslicense"
       LICENSESERVICE_PORT: "8080"
       TZ: "America/Argentina/Buenos_Aires"
-  msidentity:
-    container_name: msidentity
-    image: mesys.azurecr.io/mesys-ms-identity:latest
-    restart: unless-stopped
-    depends_on:
-      - reportsdb
-      - gworchestrator
-      - reportsapi
-    environment:
-      DBSERVER: "reportsdb"
-      DBPORT: "3306"
-      DBPASS: ${DB_PW}
-      ROUTERURI: "http://gworchestrator:8080"
-      TZ: "America/Argentina/Buenos_Aires"
+#  msidentity:
+#    container_name: msidentity
+#    image: mesys.azurecr.io/mesys-ms-identity:latest
+#    restart: unless-stopped
+#    depends_on:
+#      - reportsdb
+#      - gworchestrator
+#      - reportsapi
+#    environment:
+#      DBSERVER: "reportsdb"
+#      DBPORT: "3306"
+#      DBPASS: ${DB_PW}
+#      ROUTERURI: "http://gworchestrator:8080"
+#      TZ: "America/Argentina/Buenos_Aires"
   mscarousel:
     container_name: mscarousel
     image: mesys.azurecr.io/mesys-ms-carousel:latest
@@ -185,7 +185,7 @@ services:
       - reportsdb
       - gworchestrator
       - reportsapi
-      - msidentity
+      #- msidentity
     environment:
       DBSERVER: "reportsdb"
       DBPORT: "3306"
@@ -405,21 +405,21 @@ services:
       DBPASS: ${DB_PW}
       ROUTERURI: "http://gworchestrator:8080"
       TZ: "America/Argentina/Buenos_Aires"
-  msuser:
-    container_name: msuser
-    image: mesys.azurecr.io/mesymsuser:latest
-    restart: unless-stopped
-    depends_on:
-      - reportsdb
-      - gworchestrator
-      - reportsapi
-      - mssystemrol
-    environment:
-      DBSERVER: "reportsdb"
-      DBPORT: "3306"
-      DBPASS: ${DB_PW}
-      ROUTERURI: "http://gworchestrator:8080"
-      TZ: "America/Argentina/Buenos_Aires"
+#  msuser:
+#    container_name: msuser
+#    image: mesys.azurecr.io/mesys-ms-user:latest
+#    restart: unless-stopped
+#    depends_on:
+#      - reportsdb
+#      - gworchestrator
+#      - reportsapi
+#      - mssystemrol
+#    environment:
+#      DBSERVER: "reportsdb"
+#      DBPORT: "3306"
+#      DBPASS: ${DB_PW}
+#      ROUTERURI: "http://gworchestrator:8080"
+#      TZ: "America/Argentina/Buenos_Aires"
   msworker:
     container_name: msworker
     image: mesys.azurecr.io/mesys-ms-worker:latest
@@ -428,7 +428,7 @@ services:
       - reportsdb
       - gworchestrator
       - reportsapi
-      - msuser
+      #- msuser
     environment:
       DBSERVER: "reportsdb"
       DBPORT: "3306"

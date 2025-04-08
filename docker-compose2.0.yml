@@ -163,20 +163,20 @@ services:
       LICENSESERVICE_HOST: "mslicense"
       LICENSESERVICE_PORT: "8080"
       TZ: "America/Argentina/Buenos_Aires"
-#  msidentity:
-#    container_name: msidentity
-#    image: mesys.azurecr.io/mesys-ms-identity:latest
-#    restart: unless-stopped
-#    depends_on:
-#      - reportsdb
-#      - gworchestrator
-#      - reportsapi
-#    environment:
-#      DBSERVER: "reportsdb"
-#      DBPORT: "3306"
-#      DBPASS: ${DB_PW}
-#      ROUTERURI: "http://gworchestrator:8080"
-#      TZ: "America/Argentina/Buenos_Aires"
+  msidentity:
+    container_name: msidentity
+    image: mesys.azurecr.io/mesys-ms-identity:latest
+    restart: unless-stopped
+    depends_on:
+      - reportsdb
+      - gworchestrator
+      - reportsapi
+    environment:
+      DBSERVER: "reportsdb"
+      DBPORT: "3306"
+      DBPASS: ${DB_PW}
+      ROUTERURI: "http://gworchestrator:8080"
+      TZ: "America/Argentina/Buenos_Aires"
   mscarousel:
     container_name: mscarousel
     image: mesys.azurecr.io/mesys-ms-carousel:latest
@@ -405,21 +405,21 @@ services:
       DBPASS: ${DB_PW}
       ROUTERURI: "http://gworchestrator:8080"
       TZ: "America/Argentina/Buenos_Aires"
-#  msuser:
-#    container_name: msuser
-#    image: mesys.azurecr.io/mesys-ms-user:latest
-#    restart: unless-stopped
-#    depends_on:
-#      - reportsdb
-#      - gworchestrator
-#      - reportsapi
-#      - mssystemrol
-#    environment:
-#      DBSERVER: "reportsdb"
-#      DBPORT: "3306"
-#      DBPASS: ${DB_PW}
-#      ROUTERURI: "http://gworchestrator:8080"
-#      TZ: "America/Argentina/Buenos_Aires"
+  msuser:
+    container_name: msuser
+    image: mesys.azurecr.io/mesys-ms-user:latest
+    restart: unless-stopped
+    depends_on:
+      - reportsdb
+      - gworchestrator
+      - reportsapi
+      - mssystemrol
+    environment:
+      DBSERVER: "reportsdb"
+      DBPORT: "3306"
+      DBPASS: ${DB_PW}
+      ROUTERURI: "http://gworchestrator:8080"
+      TZ: "America/Argentina/Buenos_Aires"
   msworker:
     container_name: msworker
     image: mesys.azurecr.io/mesys-ms-worker:latest

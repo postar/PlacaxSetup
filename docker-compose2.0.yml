@@ -479,15 +479,15 @@ services:
       - "${REPORTS_PORT443}:443"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
-#  yourhealthweb:
-#    container_name: yourhealthweb
-#    image: mesys.azurecr.io/mesys-frontend:latest
-#    restart: unless-stopped
-#    ports:
-#      - "${REPORTS_PORT80}:80"
-#      - "${REPORTS_PORT443}:443"
-#    volumes:
-#      - ./nginxyh.conf:/etc/nginx/nginx.conf
+  yourhealthweb:
+    container_name: yourhealthweb
+    image: mesys.azurecr.io/mesys-pp-frontend:latest
+    restart: unless-stopped
+    ports:
+      - "${YH_PORT80}:80"
+      - "${YH_PORT443}:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
 #################################
   tunnel:
     image: cloudflare/cloudflared:latest
